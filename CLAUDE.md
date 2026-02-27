@@ -112,3 +112,64 @@ interface CubeStore {
 ```typescript
 const ANIMATION_DAMPING = 15  // 阻尼系数
 ```
+
+---
+
+## Phase 6 完成总结 (F2L 核心架构)
+
+### 已完成工作
+
+1. **3D 动画瞬移系统**
+   - `setupScenario(formula)` 瞬间预设功能
+   - `isInstant` 状态控制动画/瞬移切换
+   - 50ms 后自动恢复正常动画模式
+
+2. **F2L 核心架构搭建**
+   - 创建数据源文件 `src/data/f2lCases.ts`
+   - 定义 `F2LCase` 接口和 4 大分类
+   - 分类：基础已配对、顶层异色、顶层同色、槽内/藏角
+
+3. **前 8 种 F2L 基础情况数据录入**
+   - 每类各 2 个典型案例
+   - 包含 setupFormula、formula、stepDescriptions
+   - 解说词中明确标注"转化为 xxx 元情况"
+
+4. **F2LTutorial.tsx UI 重构**
+   - 左侧分类折叠菜单
+   - 动态分组渲染
+   - 保留所有播放控制、键盘快捷键 (← →)
+
+5. **部署上线**
+   - Vercel 部署成功
+
+---
+
+## Phase 7 待办事项
+
+### 目标：补全剩余 33 种 F2L 公式数据
+
+F2L 共有 41 种情况，目前已录入 8 种，还需补全 33 种。
+
+### 数据结构规范（已验证）
+```typescript
+interface F2LCase {
+  id: string;           // 如 "F2L-09"
+  category: string;    // 4 大分类之一
+  name: string;         // 情况名称
+  targetCubies: string[];  // ['1,-1,1', '1,0,1']
+  setupFormula: string;    // 打乱公式（逆向生成）
+  formula: string;         // 解决公式
+  stepDescriptions: string[];  // 解说词数组
+}
+```
+
+### 分类待补充数量
+- 1. 基础已配对：还需 ~10 种
+- 2. 顶层异色：还需 ~8 种
+- 3. 顶层同色：还需 ~8 种
+- 4. 槽内/藏角：还需 ~7 种
+
+### 核心原则
+- 41 种 → 3 种元情况（基础入槽、异色配对、同色藏角）
+- 解说词需明确标注"已转化为 xxx 元情况"
+- 目标块固定为底前右槽：`targetCubies: ['1,-1,1', '1,0,1']`
